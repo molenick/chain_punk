@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'corpus'
 
 RSpec.describe ChainPunk::Corpus do
+  subject { ChainPunk::Corpus.new(text, separator, terminator) }
+
+  let(:text) { nil }
+  let(:separator) { nil }
+  let(:terminator) { nil }
+
   context '#train' do
     context 'when called with some text' do
       let(:text) { 'abbba' }
 
       it 'returns a corpus' do
-        expect(subject.train(text)).to eq(
+        expect(subject.frequency_table).to eq(
           ['a'] => ['b'],
           ['b'] => %w[b b a]
         )
@@ -21,7 +26,7 @@ RSpec.describe ChainPunk::Corpus do
       let(:separator) { ' ' }
 
       it 'returns corpus of graphemes split by the separator' do
-        expect(subject.train(text, separator)).to eq(
+        expect(subject.frequency_table).to eq(
           ['a'] => ['b'],
           ['b'] => ['bb'],
           ['bb'] => ['a']
@@ -32,7 +37,7 @@ RSpec.describe ChainPunk::Corpus do
         let(:text) { ' a b bb a ' }
 
         it 'returns corpus of graphemes split by the separator' do
-          expect(subject.train(text, separator)).to eq(
+          expect(subject.frequency_table).to eq(
             ['a'] => ['b'],
             ['b'] => ['bb'],
             ['bb'] => ['a']
@@ -45,8 +50,8 @@ RSpec.describe ChainPunk::Corpus do
       let(:text) { 'ab.ba.abba' }
       let(:terminator) { '.' }
 
-      it 'returns corpus of graphemes first split into sets by the terminator' do
-        expect(subject.train(text, nil, terminator)).to eq(
+      it 'returns corpus of graphemes first split into phrases by the terminator' do
+        expect(subject.frequency_table).to eq(
           ['a'] => %w[b b], ['b'] => %w[a b a]
         )
       end
@@ -55,8 +60,8 @@ RSpec.describe ChainPunk::Corpus do
         let(:text) { '.ab.ba.abba.' }
         let(:terminator) { '.' }
 
-        it 'returns corpus of graphemes first split into sets by the terminator' do
-          expect(subject.train(text, nil, terminator)).to eq(
+        it 'returns corpus of graphemes first split into phrases by the terminator' do
+          expect(subject.frequency_table).to eq(
             ['a'] => %w[b b], ['b'] => %w[a b a]
           )
         end
@@ -68,8 +73,8 @@ RSpec.describe ChainPunk::Corpus do
       let(:terminator) { '.' }
       let(:separator) { ' ' }
 
-      it 'returns corpus of graphemes split into sets by the terminator, then the separator' do
-        expect(subject.train(text, separator, terminator)).to eq(
+      it 'returns corpus of graphemes split into phrases by the terminator, then the separator' do
+        expect(subject.frequency_table).to eq(
           ['a'] => %w[b b], ['b'] => %w[a b a]
         )
       end
