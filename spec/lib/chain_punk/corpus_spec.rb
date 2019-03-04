@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 RSpec.describe ChainPunk::Corpus do
-  subject { ChainPunk::Corpus.new(text, separators, terminator, exclusions) }
+  subject { ChainPunk::Corpus.new(text, separators, terminators, exclusions) }
 
   let(:text) { nil }
   let(:separators) { [] }
-  let(:terminator) { nil }
+  let(:terminators) { [] }
   let(:exclusions) { [] }
 
   context '#train' do
@@ -44,21 +44,21 @@ RSpec.describe ChainPunk::Corpus do
       end
     end
 
-    context 'when called with a terminator' do
-      let(:text) { 'ab.ba.abba' }
-      let(:terminator) { '.' }
+    context 'when called with terminatorss' do
+      let(:text) { 'ab.ba!abba?' }
+      let(:terminators) { ['.', '!', '?'] }
 
-      it 'returns frequency table first split into phrases by the terminator' do
+      it 'returns frequency table first split into phrases by the terminators' do
         expect(subject.frequency_table).to eq(
           ['a'] => %w[b b], ['b'] => %w[a b a]
         )
       end
 
-      context 'when called with some text that starts/ends with the supplied terminator' do
+      context 'when called with some text that starts/ends with the supplied terminators' do
         let(:text) { '.ab.ba.abba.' }
-        let(:terminator) { '.' }
+        let(:terminators) { '.' }
 
-        it 'returns frequency table first split into phrases by the terminator' do
+        it 'returns frequency table first split into phrases by the terminators' do
           expect(subject.frequency_table).to eq(
             ['a'] => %w[b b], ['b'] => %w[a b a]
           )
@@ -66,12 +66,12 @@ RSpec.describe ChainPunk::Corpus do
       end
     end
 
-    context 'when called with a separators and a terminator' do
+    context 'when called with a separators and a terminators' do
       let(:text) { 'a b. b a. a b b a' }
-      let(:terminator) { '.' }
+      let(:terminators) { '.' }
       let(:separators) { ' ' }
 
-      it 'returns frequency table split into phrases by the terminator, then the separators' do
+      it 'returns frequency table split into phrases by the terminators, then the separators' do
         expect(subject.frequency_table).to eq(
           ['a'] => %w[b b], ['b'] => %w[a b a]
         )
@@ -80,7 +80,7 @@ RSpec.describe ChainPunk::Corpus do
 
     context 'when called with exclusions' do
       let(:text) { 'a b. b a. a b;.. b +a' }
-      let(:terminator) { '.' }
+      let(:terminators) { '.' }
       let(:separators) { ' ' }
       let(:exclusions) { [';..', '+'] }
 

@@ -2,14 +2,14 @@ module ChainPunk
   class Corpus
     attr_reader :frequency_table
 
-    def initialize(text, seperators = [], terminator = nil, exclusions = [])
-      train(text, seperators, terminator, exclusions)
+    def initialize(text, seperators = [], terminators = [], exclusions = [])
+      train(text, seperators, terminators, exclusions)
     end
 
-    def train(text, seperators = [], terminator = nil, exclusions = [])
+    def train(text, seperators = [], terminators = [], exclusions = [])
       exclusion_text = remove_exclusions(text, exclusions)
-      text_phrases = split_text_phrases(exclusion_text, terminator)
-      grapheme_phrases = process_text_phrases(text_phrases, seperators)
+      text_phrases = process_sets(exclusion_text, terminators)
+      grapheme_phrases = process_phrases(text_phrases, seperators)
       @frequency_table = process_graphemes(grapheme_phrases)
     end
 
@@ -23,13 +23,13 @@ module ChainPunk
       text
     end
 
-    def split_text_phrases(text, terminator)
-      return [text] if terminator.nil?
+    def process_sets(text, terminators)
+      return [text] if terminators.empty?
 
-      text.split(terminator)
+      text.split(Regexp.union(terminators)).reject(&:empty?)
     end
 
-    def process_text_phrases(phrases, seperators = [])
+    def process_phrases(phrases, seperators = [])
       grapheme_phrases = []
       until phrases.empty?
         grapheme_phrases << split_phrase(phrases[0], seperators)
