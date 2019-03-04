@@ -1,6 +1,6 @@
 module ChainPunk
   class Corpus
-    attr_reader :frequency_table
+    attr_reader :frequency_table, :starting_graphemes
 
     def initialize(text, seperators = [], terminators = [], exclusions = [])
       train(text, seperators, terminators, exclusions)
@@ -10,7 +10,7 @@ module ChainPunk
       exclusion_text = remove_exclusions(text, exclusions)
       text_phrases = process_sets(exclusion_text, terminators)
       grapheme_phrases = process_phrases(text_phrases, seperators)
-      @frequency_table = process_graphemes(grapheme_phrases)
+      @frequency_table, @starting_graphemes = process_graphemes(grapheme_phrases)
     end
 
     private
@@ -46,20 +46,19 @@ module ChainPunk
     end
 
     def process_graphemes(grapheme_phrases)
-      corpus = {}
+      frequency_table = {}
+      starting_graphemes = []
 
-      until grapheme_phrases.empty?
-        graphemes = grapheme_phrases[0]
+      grapheme_phrases.each do |phrase|
+        starting_graphemes << phrase[0]
 
-        while graphemes.size > 1
-          (corpus[graphemes[0, 1]] ||= []) << graphemes[1]
-          graphemes.shift
+        while phrase.size > 1
+          (frequency_table[phrase[0, 1]] ||= []) << phrase[1]
+          phrase.shift
         end
-
-        grapheme_phrases.shift
       end
 
-      corpus
+      [frequency_table, starting_graphemes]
     end
   end
 end

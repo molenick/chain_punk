@@ -4,8 +4,8 @@ module ChainPunk
       @frequency_table = frequency_table
     end
 
-    def create_phrase(grapheme_count, separator = nil, terminator = nil)
-      grapheme = @frequency_table.keys.sample[0]
+    def create_phrase(grapheme_count, separator = nil, terminator = nil, starting_graphemes = [])
+      grapheme = starting_grapheme(starting_graphemes)
       phrase = grapheme
 
       (2..grapheme_count).each do
@@ -16,6 +16,14 @@ module ChainPunk
         grapheme = next_grapheme
       end
       "#{phrase}#{terminator}"
+    end
+
+    private
+
+    def starting_grapheme(starting_graphemes = [])
+      return @frequency_table.keys.sample[0] if starting_graphemes.empty?
+
+      starting_graphemes.sample
     end
   end
 end

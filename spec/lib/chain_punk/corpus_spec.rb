@@ -13,12 +13,19 @@ RSpec.describe ChainPunk::Corpus do
   context '#train' do
     context 'when called with some text' do
       let(:text) { 'abbba' }
+      let(:text) { 'a b. b a. a b c. b a' }
+      let(:terminators) { '.' }
+      let(:separators) { ' ' }
 
       it 'returns a corpus' do
         expect(subject.frequency_table).to eq(
-          ['a'] => ['b'],
-          ['b'] => %w[b b a]
+          ['a'] => %w[b b],
+          ['b'] => %w[a c a]
         )
+      end
+
+      it 'records the graphemes that start each phrase' do
+        expect(subject.starting_graphemes).to eq(%w[a b a b])
       end
     end
 
