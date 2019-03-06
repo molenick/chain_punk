@@ -17,7 +17,7 @@ This allows generating single words from a word list or phrases from a source te
 🛠 Coming soon 🛠
 
 ### Corpus
-#### Terminator
+#### Closure
 #### Seperator
 ### Phrase
 ### Grapheme

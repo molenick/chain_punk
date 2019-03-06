@@ -12,10 +12,10 @@ module ChainPunk
         break if @frequency_table[[grapheme]].nil?
 
         next_grapheme = @frequency_table[[grapheme]].sample
-        phrase = "#{phrase}#{options[:separator]}#{next_grapheme}"
+        phrase = "#{phrase}#{options[:boundary]}#{next_grapheme}"
         grapheme = next_grapheme
       end
-      "#{phrase}#{options[:terminator]}"
+      "#{phrase}#{options[:closure]}"
     end
 
     private

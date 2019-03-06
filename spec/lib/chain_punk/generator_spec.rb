@@ -38,31 +38,31 @@ RSpec.describe ChainPunk::Generator do
       end
     end
 
-    context 'when the seperator and terminator are nil' do
+    context 'when the seperator and closure are nil' do
       let(:frequency_table) { { ['a'] => %w[b b], ['b'] => %w[a b a] } }
       let(:grapheme_count) { 5 }
 
-      it 'returns a phrase with no seperator or terminator' do
+      it 'returns a phrase with no seperator or closure' do
         expect(subject.create_phrase(grapheme_count, options).length).to eq(5)
       end
     end
 
-    context 'when called with a separator' do
+    context 'when called with a boundary' do
       let(:frequency_table) { { ['a'] => %w[b b], ['b'] => %w[a b a] } }
       let(:grapheme_count) { 5 }
-      let(:options) { { separator: ' ' } }
+      let(:options) { { boundary: ' ' } }
 
-      it 'returns a phrase of graphemes separated by the separator' do
+      it 'returns a phrase of graphemes separated by the boundary' do
         expect(subject.create_phrase(grapheme_count, options).split(' ').length).to eq 5
       end
     end
 
-    context 'when called with a terminator' do
+    context 'when called with a closure' do
       let(:frequency_table) { { ['a'] => %w[b b], ['b'] => %w[a b a] } }
       let(:grapheme_count) { 5 }
-      let(:options) { { terminator: '.' } }
+      let(:options) { { closure: '.' } }
 
-      it 'returns a phrase terminated with the terminator' do
+      it 'returns a phrase terminated with the closure' do
         expect(subject.create_phrase(grapheme_count, options)[-1]).to eq('.')
       end
     end

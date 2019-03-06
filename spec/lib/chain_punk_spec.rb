@@ -13,7 +13,7 @@ RSpec.describe ChainPunk do
 
   context 'when setup to generate words' do
     let(:source_text) { IO.read('spec/fixtures/names.txt') }
-    let(:corpus_options) { { terminators: ["\n"] } }
+    let(:corpus_options) { { closures: ["\n"] } }
     let(:corpus) { ChainPunk::Corpus.new(source_text, corpus_options) }
     let(:generator) { ChainPunk::Generator.new(corpus.frequency_table) }
     let(:generator_length) { 5 }
@@ -25,8 +25,8 @@ RSpec.describe ChainPunk do
 
   context 'when setup to generate sentences' do
     let(:source_text) { IO.read('spec/fixtures/the_golden_bird.txt') }
-    let(:corpus_options) { { separators: [' '], terminators: ['.', '!', '?'], exclusions: [':', ';', '"', ','] } }
-    let(:generator_options) { { separator: ' ', terminator: '.' } }
+    let(:corpus_options) { { boundaries: [' '], closures: ['.', '!', '?'], exclusions: [':', ';', '"', ','] } }
+    let(:generator_options) { { boundary: ' ', closure: '.' } }
     let(:corpus) { ChainPunk::Corpus.new(source_text, corpus_options) }
     let(:generator) { ChainPunk::Generator.new(corpus.frequency_table) }
     let(:generator_length) { 5 }
@@ -35,15 +35,15 @@ RSpec.describe ChainPunk do
       expect(generator.create_phrase(generator_length, generator_options).split(' ').count).to eq(generator_length)
     end
 
-    it 'ends with the terminator' do
+    it 'ends with the closure' do
       expect(generator.create_phrase(generator_length, generator_options)[-1]).to eq('.')
     end
   end
 
   context 'when called with some start words' do
     let(:source_text) { IO.read('spec/fixtures/the_golden_bird.txt') }
-    let(:corpus_options) { { separators: [' '], terminators: ['.', '!', '?'], exclusions: [':', ';', '"', ','] } }
-    let(:generator_options) { { separator: ' ', starting_graphemes: ['bird'] } }
+    let(:corpus_options) { { boundaries: [' '], closures: ['.', '!', '?'], exclusions: [':', ';', '"', ','] } }
+    let(:generator_options) { { boundary: ' ', starting_graphemes: ['bird'] } }
     let(:generator_length) { 1 }
     let(:corpus) { ChainPunk::Corpus.new(source_text, corpus_options) }
     let(:generator) { ChainPunk::Generator.new(corpus.frequency_table) }

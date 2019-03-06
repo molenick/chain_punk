@@ -8,8 +8,8 @@ module ChainPunk
 
     def train(text, options = {})
       exclusion_text = remove_exclusions(text, options[:exclusions])
-      text_phrases = process_sets(exclusion_text, options[:terminators])
-      grapheme_phrases = process_phrases(text_phrases, options[:separators])
+      text_phrases = process_sets(exclusion_text, options[:closures])
+      grapheme_phrases = process_phrases(text_phrases, options[:boundaries])
       @frequency_table, @starting_graphemes = process_graphemes(grapheme_phrases)
     end
 
@@ -25,26 +25,26 @@ module ChainPunk
       text
     end
 
-    def process_sets(text, terminators = nil)
-      return [text] if terminators.nil?
+    def process_sets(text, closures = nil)
+      return [text] if closures.nil?
 
-      text.split(Regexp.union(terminators)).reject(&:empty?)
+      text.split(Regexp.union(closures)).reject(&:empty?)
     end
 
-    def process_phrases(phrases, separators = nil)
+    def process_phrases(phrases, boundaries = nil)
       grapheme_phrases = []
       until phrases.empty?
-        grapheme_phrases << split_phrase(phrases[0], separators)
+        grapheme_phrases << split_phrase(phrases[0], boundaries)
         phrases.shift
       end
 
       grapheme_phrases
     end
 
-    def split_phrase(phrase, separators = nil)
-      return phrase.chars if separators.nil?
+    def split_phrase(phrase, boundaries = nil)
+      return phrase.chars if boundaries.nil?
 
-      phrase.split(Regexp.union(separators)).reject(&:empty?)
+      phrase.split(Regexp.union(boundaries)).reject(&:empty?)
     end
 
     def process_graphemes(grapheme_phrases)
