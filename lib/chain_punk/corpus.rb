@@ -42,7 +42,7 @@ module ChainPunk
     end
 
     def split_phrase(phrase, boundaries = nil)
-      return phrase.chars if boundaries.nil?
+      return phrase.to_s.chars if boundaries.nil?
 
       phrase.split(Regexp.union(boundaries)).reject(&:empty?)
     end

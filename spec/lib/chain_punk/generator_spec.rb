@@ -33,16 +33,16 @@ RSpec.describe ChainPunk::Generator do
       let(:grapheme_count) { 1 }
       let(:options) { { starting_graphemes: ['a'] } }
 
-      it 'returns a phrase with 5 graphemes' do
+      it 'returns a phrase starting with those graphemes' do
         expect(subject.create_phrase(grapheme_count, options)).to eq('a')
       end
     end
 
-    context 'when the seperator and closure are nil' do
+    context 'when the boundary and closure are nil' do
       let(:frequency_table) { { ['a'] => %w[b b], ['b'] => %w[a b a] } }
       let(:grapheme_count) { 5 }
 
-      it 'returns a phrase with no seperator or closure' do
+      it 'returns a phrase with no boundary or closure' do
         expect(subject.create_phrase(grapheme_count, options).length).to eq(5)
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe ChainPunk::Generator do
       end
     end
 
-    context 'when the generator hits a dead end' do
+    context 'when the generator cannot find a grapheme that follows the current grapheme' do
       let(:frequency_table) { { ['a'] => %w[b] } }
       let(:grapheme_count) { 5 }
 
