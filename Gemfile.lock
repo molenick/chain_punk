@@ -1,15 +1,21 @@
+PATH
+  remote: .
+  specs:
+    chain_punk (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
     diff-lcs (1.3)
     jaro_winkler (1.5.2)
-    parallel (1.13.0)
+    parallel (1.14.0)
     parser (2.6.0.0)
       ast (~> 2.4.0)
     powerpack (0.1.2)
     psych (3.1.0)
     rainbow (3.0.0)
+    rake (10.5.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -41,9 +47,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec
-  rubocop
-  rubocop-rspec
+  bundler (~> 1.17)
+  chain_punk!
+  rake (~> 10.0)
+  rspec (~> 3.0)
+  rubocop (~> 0.65)
+  rubocop-rspec (~> 1.32)
 
 BUNDLED WITH
    1.17.2
