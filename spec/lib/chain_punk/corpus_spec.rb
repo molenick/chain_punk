@@ -17,12 +17,12 @@ RSpec.describe ChainPunk::Corpus do
     context 'when called with some text' do
       let(:text) { 'acab' }
 
-      it 'returns a corpus' do
-        expect(subject.frequency_table).to eq(['a'] => %w[c b], ['c'] => ['a'])
+      it 'returns a frequency_table' do
+        expect(subject.frequency_table).to eq(['a'] => [['c'], ['b']], ['c'] => [['a']])
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq(%w[a])
+        expect(subject.starting_graphemes).to eq([['a']])
       end
     end
 
@@ -31,22 +31,22 @@ RSpec.describe ChainPunk::Corpus do
       let(:options) { { boundaries: [' ', '-'] } }
 
       it 'returns a frequency table divided by boundaries' do
-        expect(subject.frequency_table).to eq(['a'] => ['b'], ['b'] => %w[b b a])
+        expect(subject.frequency_table).to eq(['a'] => [['b']], ['b'] => [['b'], ['b'], ['a']])
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq(['a'])
+        expect(subject.starting_graphemes).to eq([['a']])
       end
 
       context 'when called with some text that starts/ends with the supplied boundaries' do
         let(:text) { ' a b b-b a ' }
 
         it 'returns a frequency table without boundaries' do
-          expect(subject.frequency_table).to eq(['a'] => ['b'], ['b'] => %w[b b a])
+          expect(subject.frequency_table).to eq(['a'] => [['b']], ['b'] => [['b'], ['b'], ['a']])
         end
 
         it 'records the graphemes that start each phrase' do
-          expect(subject.starting_graphemes).to eq(['a'])
+          expect(subject.starting_graphemes).to eq([['a']])
         end
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe ChainPunk::Corpus do
       let(:options) { { closures: ['.', '!', '?'] } }
 
       it 'returns a frequency table divided by closures' do
-        expect(subject.frequency_table).to eq(['a'] => %w[b b], ['b'] => %w[a b a])
+        expect(subject.frequency_table).to eq(['a'] => [['b'], ['b']], ['b'] => [['a'], ['b'], ['a']])
       end
 
       context 'when called with some text that starts or ends with the supplied closures' do
@@ -64,11 +64,11 @@ RSpec.describe ChainPunk::Corpus do
         let(:options) { { closures: ['.'] } }
 
         it 'returns a frequency table first split into phrases by the closures' do
-          expect(subject.frequency_table).to eq(['a'] => %w[b b], ['b'] => %w[a b a])
+          expect(subject.frequency_table).to eq(['a'] => [['b'], ['b']], ['b'] => [['a'], ['b'], ['a']])
         end
 
         it 'records the graphemes that start each phrase' do
-          expect(subject.starting_graphemes).to eq(%w[a b a])
+          expect(subject.starting_graphemes).to eq([['a'], ['b'], ['a']])
         end
       end
     end
@@ -78,11 +78,37 @@ RSpec.describe ChainPunk::Corpus do
       let(:options) { { exclusions: ['.'] } }
 
       it 'returns a frequency table with the exclusions removed' do
-        expect(subject.frequency_table).to eq(['a'] => %w[b a b], ['b'] => ['a'])
+        expect(subject.frequency_table).to eq(['a'] => [['b'], ['a'], ['b']], ['b'] => [['a']])
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq(['a'])
+        expect(subject.starting_graphemes).to eq([['a']])
+      end
+    end
+
+    context 'when called with index size of 1' do
+      let(:text) { 'acab' }
+      let(:options) { { index_size: 1 } }
+
+      it 'returns a frequency_table' do
+        expect(subject.frequency_table).to eq(['a'] => [['c'], ['b']], ['c'] => [['a']])
+      end
+
+      it 'records the graphemes that start each phrase' do
+        expect(subject.starting_graphemes).to eq([['a']])
+      end
+    end
+
+    context 'when called with index size of 2' do
+      let(:text) { 'acab.' }
+      let(:options) { { index_size: 2, closures: ['.'] } }
+
+      it 'returns a frequency_table' do
+        expect(subject.frequency_table).to eq(['a', 'c'] => [['a', 'b']], ['c', 'a'] => [['b']])
+      end
+
+      it 'records the graphemes that start each phrase' do
+        expect(subject.starting_graphemes).to eq([['a', 'c']])
       end
     end
 
@@ -91,11 +117,11 @@ RSpec.describe ChainPunk::Corpus do
       let(:options) { { exclusions: ['j'], closures: ['.'], boundaries: [' '] } }
 
       it 'returns a frequency table split into phrases by the closures, then the boundaries' do
-        expect(subject.frequency_table).to eq(['a'] => %w[b b], ['b'] => %w[a b a])
+        expect(subject.frequency_table).to eq(['a'] => [['b'], ['b']], ['b'] => [['a'], ['b'], ['a']])
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq(%w[a b a])
+        expect(subject.starting_graphemes).to eq([['a'], ['b'], ['a']])
       end
     end
 
@@ -108,20 +134,20 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'makes a single starting grapheme out of what is left' do
-        expect(subject.starting_graphemes).to eq(['j a .  a. a   a'])
+        expect(subject.starting_graphemes).to eq([['j a .  a. a   a']])
       end
     end
 
     context 'when exclusions, boundaries and closures overlap' do
       let(:text) { 'j a b. b a. a b b a' }
-      let(:options) { { exclusions: %w[b j], closures: ['.', 'b'], boundaries: [' ', 'b'] } }
+      let(:options) { { exclusions: ['b', 'j'], closures: ['.', 'b'], boundaries: [' ', 'b'] } }
 
       it 'returns the same as if the overlapping graphemes were not present' do
-        expect(subject.frequency_table).to eq(['a'] => ['a'])
+        expect(subject.frequency_table).to eq(['a'] => [['a']])
       end
 
       it 'returns starting graphemes as if the overlapping graphemes were not present' do
-        expect(subject.starting_graphemes).to eq(%w[a a a])
+        expect(subject.starting_graphemes).to eq([['a'], ['a'], ['a']])
       end
     end
   end

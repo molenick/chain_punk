@@ -2,12 +2,15 @@ AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
 
-Style/Documentation:
-  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
 
 Metrics/LineLength:
   Enabled: false
 
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*'
+Style/Documentation:
+  Enabled: false
+
+Style/WordArray:
+    Enabled: false

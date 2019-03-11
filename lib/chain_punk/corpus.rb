@@ -10,7 +10,7 @@ module ChainPunk
       exclusion_text = remove_exclusions(text, options[:exclusions])
       text_phrases = process_sets(exclusion_text, options[:closures])
       grapheme_phrases = process_phrases(text_phrases, options[:boundaries])
-      @frequency_table, @starting_graphemes = process_graphemes(grapheme_phrases)
+      @frequency_table, @starting_graphemes = process_graphemes(grapheme_phrases, options[:index_size])
     end
 
     private
@@ -47,15 +47,13 @@ module ChainPunk
       phrase.split(Regexp.union(boundaries)).reject(&:empty?)
     end
 
-    def process_graphemes(grapheme_phrases)
-      frequency_table = {}
-      starting_graphemes = []
-
+    def process_graphemes(grapheme_phrases, index_size = 1, frequency_table = {}, starting_graphemes = [])
+      index_size ||= 1
       grapheme_phrases.each do |phrase|
-        starting_graphemes << phrase[0]
+        starting_graphemes << phrase[0, index_size]
 
-        while phrase.size > 1
-          (frequency_table[phrase[0, 1]] ||= []) << phrase[1]
+        while phrase.size > index_size
+          (frequency_table[phrase[0, index_size]] ||= []) << phrase[index_size, index_size]
           phrase.shift
         end
       end
