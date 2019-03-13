@@ -57,15 +57,15 @@ RSpec.describe ChainPunk do
     end
   end
 
-  context 'when called with some starting graphemes' do
+  context 'when called with some seeds' do
     let(:source_text) { IO.read('spec/fixtures/the_golden_bird.txt') }
     let(:corpus_options) { { boundaries: [' '], closures: ['.', '!', '?'], exclusions: [':', ';', '"', ','] } }
-    let(:generator_options) { { boundary: ' ', starting_graphemes: [['bird']] } }
+    let(:generator_options) { { boundary: ' ', seeds: [['bird']] } }
     let(:generator_length) { 1 }
     let(:corpus) { ChainPunk::Corpus.new(source_text, corpus_options) }
     let(:generator) { ChainPunk::Generator.new(corpus.frequency_table) }
 
-    it 'generates a phrase starting with the starting grapheme' do
+    it 'generates a phrase starting with the seeds' do
       expect(generator.generate(generator_length, generator_options)).to eq('bird')
     end
   end

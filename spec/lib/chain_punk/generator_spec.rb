@@ -28,10 +28,10 @@ RSpec.describe ChainPunk::Generator do
       end
     end
 
-    context 'when called with some starting graphemes' do
+    context 'when called with some seeds' do
       let(:frequency_table) { { ['a'] => ['b', 'b'], ['b'] => ['a', 'b', 'a'] } }
       let(:grapheme_count) { 1 }
-      let(:options) { { starting_graphemes: [['a']] } }
+      let(:options) { { seeds: [['a']] } }
 
       it 'returns a phrase starting with those graphemes' do
         expect(subject.generate(grapheme_count, options)).to eq('a')
@@ -105,9 +105,9 @@ RSpec.describe ChainPunk::Generator do
         expect(subject.generate(grapheme_count, options).length).to eq(6)
       end
 
-      context 'when called with some starting graphemes' do
+      context 'when called with some seeds' do
         let(:grapheme_count) { 6 }
-        let(:options) { { index_size: 2, starting_graphemes: [['c', 'a']] } }
+        let(:options) { { index_size: 2, seeds: [['c', 'a']] } }
 
         it 'returns a phrase starting with those graphemes' do
           expect(subject.generate(grapheme_count, options)[0, 2]).to eq('ca')
@@ -124,9 +124,9 @@ RSpec.describe ChainPunk::Generator do
         expect(subject.generate(grapheme_count, options).length).to eq(4)
       end
 
-      context 'when called with some starting graphemes' do
+      context 'when called with some seeds' do
         let(:grapheme_count) { 5 }
-        let(:options) { { index_size: 2, starting_graphemes: [['c', 'a']] } }
+        let(:options) { { index_size: 2, seeds: [['c', 'a']] } }
 
         it 'returns a phrase starting with those graphemes' do
           expect(subject.generate(grapheme_count, options)[0, 2]).to eq('ca')

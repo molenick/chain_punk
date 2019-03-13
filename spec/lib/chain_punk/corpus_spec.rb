@@ -22,7 +22,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a']])
+        expect(subject.seeds).to eq([['a']])
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a']])
+        expect(subject.seeds).to eq([['a']])
       end
 
       context 'when called with some text that starts/ends with the supplied boundaries' do
@@ -46,7 +46,7 @@ RSpec.describe ChainPunk::Corpus do
         end
 
         it 'records the graphemes that start each phrase' do
-          expect(subject.starting_graphemes).to eq([['a']])
+          expect(subject.seeds).to eq([['a']])
         end
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe ChainPunk::Corpus do
         end
 
         it 'records the graphemes that start each phrase' do
-          expect(subject.starting_graphemes).to eq([['a'], ['b'], ['a']])
+          expect(subject.seeds).to eq([['a'], ['b'], ['a']])
         end
       end
     end
@@ -82,7 +82,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a']])
+        expect(subject.seeds).to eq([['a']])
       end
     end
 
@@ -95,7 +95,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a']])
+        expect(subject.seeds).to eq([['a']])
       end
     end
 
@@ -108,7 +108,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a', 'c']])
+        expect(subject.seeds).to eq([['a', 'c']])
       end
     end
 
@@ -121,7 +121,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'records the graphemes that start each phrase' do
-        expect(subject.starting_graphemes).to eq([['a'], ['b'], ['a']])
+        expect(subject.seeds).to eq([['a'], ['b'], ['a']])
       end
     end
 
@@ -134,7 +134,7 @@ RSpec.describe ChainPunk::Corpus do
       end
 
       it 'makes a single starting grapheme out of what is left' do
-        expect(subject.starting_graphemes).to eq([['j a .  a. a   a']])
+        expect(subject.seeds).to eq([['j a .  a. a   a']])
       end
     end
 
@@ -146,8 +146,8 @@ RSpec.describe ChainPunk::Corpus do
         expect(subject.frequency_table).to eq(['a'] => [['a']])
       end
 
-      it 'returns starting graphemes as if the overlapping graphemes were not present' do
-        expect(subject.starting_graphemes).to eq([['a'], ['a'], ['a']])
+      it 'returns seeds as if the overlapping graphemes were not present' do
+        expect(subject.seeds).to eq([['a'], ['a'], ['a']])
       end
     end
   end
