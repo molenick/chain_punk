@@ -27,10 +27,7 @@ require 'chain_punk'
 text = IO.read('docs/names.txt').downcase
 corpus = ChainPunk::Corpus.new(text, closures: ["\n"], exclusions: [' '])
 generator = ChainPunk::Generator.new(corpus.frequency_table)
-
-[*1..5].each do
-  puts generator.generate(rand(4..8)).capitalize
-end
+[*1..5].each { puts generator.generate(rand(4..8)).capitalize }
 ```
 
 Outputs:
@@ -49,10 +46,7 @@ require 'chain_punk'
 text = IO.read('docs/code_of_hammurabi.txt')
 corpus = ChainPunk::Corpus.new(text, boundaries: [' '], closures: ['.', ';'])
 generator = ChainPunk::Generator.new(corpus.frequency_table)
-
-[*1..5].each do
-  puts generator.generate(rand(4..8),  boundary: ' ')
-end
+[*1..5].each { puts generator.generate(rand(4..8),  boundary: ' ') }
 ```
 
 Outputs:

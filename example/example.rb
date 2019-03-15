@@ -2,20 +2,30 @@ require 'rubygems'
 require 'bundler/setup'
 require 'chain_punk'
 
-# Generate five names from a sample set of English names
-text = IO.read('docs/names.txt').downcase
-corpus = ChainPunk::Corpus.new(text, closures: ["\n"], exclusions: [' '])
-generator = ChainPunk::Generator.new(corpus.frequency_table)
+names = IO.read('docs/names.txt').downcase
+hammurabi = IO.read('docs/code_of_hammurabi.txt')
 
-[*1..5].each do
-  puts generator.generate(rand(4..8)).capitalize
-end
+# Generate five names from a sample set of English names
+corpus = ChainPunk::Corpus.new(names, closures: ["\n"], exclusions: [' '])
+generator = ChainPunk::Generator.new(corpus.frequency_table)
+[*1..5].each { puts generator.generate(rand(4..8)).capitalize }
 
 # Generate five sentences from a translation of the Code of Hammurabi
-text = IO.read('docs/code_of_hammurabi.txt')
-corpus = ChainPunk::Corpus.new(text, boundaries: [' '], closures: ['.', ';'])
+corpus = ChainPunk::Corpus.new(hammurabi, boundaries: [' '], closures: ['.', ';'])
 generator = ChainPunk::Generator.new(corpus.frequency_table)
+[*1..5].each { puts generator.generate(rand(4..8), boundary: ' ') }
 
-[*1..5].each do
-  puts generator.generate(rand(4..8), boundary: ' ')
-end
+# Generate five sentences that begin with words from a chose list of seeds
+corpus = ChainPunk::Corpus.new(hammurabi, boundaries: [' '], closures: ['.', ';'])
+generator = ChainPunk::Generator.new(corpus.frequency_table)
+[*1..5].each { puts generator.generate(rand(4..8), boundary: ' ', seeds: [['When'], ['when']]) }
+
+# Generate five sentences using the starting words of the original text
+corpus = ChainPunk::Corpus.new(hammurabi, boundaries: [' '], closures: ['.', ';'])
+generator = ChainPunk::Generator.new(corpus.frequency_table)
+[*1..5].each { puts generator.generate(rand(4..8), boundary: ' ', seeds: corpus.seeds) }
+
+# Generate text using a sequence of two words (instead of one) to increase order/reduce chaos.
+corpus = ChainPunk::Corpus.new(hammurabi, boundaries: [' '], closures: ['.', ';'], index_size: 2)
+generator = ChainPunk::Generator.new(corpus.frequency_table)
+[*1..5].each { puts generator.generate(rand(4..8), boundary: ' ', index_size: 2) }
