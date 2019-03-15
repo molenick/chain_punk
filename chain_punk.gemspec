@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Matt Olenick']
   spec.email         = ['matt.olenick@gmail.com']
   spec.homepage      = 'https://github.com/molenick/chain_punk'
-  spec.license       = 'Nonstandard'
+  spec.license       = 'MIT'
   spec.summary       = 'Generate text from configurable patterns.'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
