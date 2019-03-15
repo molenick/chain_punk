@@ -3,6 +3,9 @@ AllCops:
     - 'spec/spec_helper.rb'
     - 'chain_punk.gemspec'
 
+FrozenStringLiteralComment:
+  EnforcedStyle: always
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ChainPunk
   class Corpus
     attr_reader :frequency_table, :seeds

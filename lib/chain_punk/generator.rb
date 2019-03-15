@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ChainPunk
   class Generator
     def initialize(frequency_table)
